@@ -1,31 +1,33 @@
-import { DocumentHandle, useDocument } from "@sanity/sdk-react"
-import { Card, Flex, Stack, Text, Container } from "@sanity/ui"
+import { DocumentHandle, useDocument } from "@sanity/sdk-react";
+import { Card, Flex, Stack, Text, Container } from "@sanity/ui";
 
-import { StatusBadge } from "./StatusBadge"
-import { Sentiment } from "./Sentiment"
-import { Notes } from "./Notes"
+import { StatusBadge } from "./StatusBadge";
+import { Sentiment } from "./Sentiment";
+import { Notes } from "./Notes";
+import { Actions } from "./Actions";
+import { Assignee } from "./Assignee";
 
 type FeedbackEditProps = {
-  selectedFeedback: DocumentHandle
-}
+  selectedFeedback: DocumentHandle;
+};
 
 export function FeedbackEdit({ selectedFeedback }: FeedbackEditProps) {
-  const { data } = useDocument({ ...selectedFeedback })
+  const { data } = useDocument({ ...selectedFeedback });
 
   if (!data) {
-    return null
+    return null;
   }
 
   // Ensure type safety for all fields
-  const author = typeof data.author === "string" ? data.author : ""
-  const email = typeof data.email === "string" ? data.email : ""
-  const content = typeof data.content === "string" ? data.content : ""
-  const createdAt =
-    typeof data._createdAt === "string" ? data._createdAt.split("T")[0] : ""
-  const status = typeof data.status === "string" ? data.status : "pending"
-  const sentiment = typeof data.sentiment === "string" ? data.sentiment : ""
-  const notes = typeof data.notes === "string" ? data.notes : ""
-//   const assignee = typeof data.assignee === "string" ? data.assignee : ""
+const author = typeof data.author === "string" ? data.author : "";
+const email = typeof data.email === "string" ? data.email : "";
+const content = typeof data.content === "string" ? data.content : "";
+const createdAt =
+typeof data._createdAt === "string" ? data._createdAt.split("T")[0] : "";
+const status = typeof data.status === "string" ? data.status : "pending";
+const sentiment = typeof data.sentiment === "string" ? data.sentiment : "";
+const notes = typeof data.notes === "string" ? data.notes : "";
+const assignee = typeof data.assignee === "string" ? data.assignee : "";
 
   return (
     <Container width={1}>
@@ -49,11 +51,19 @@ export function FeedbackEdit({ selectedFeedback }: FeedbackEditProps) {
                 <Text size={3}>{content}</Text>
               </Card>
             </Stack>
-                <Sentiment value={sentiment} handle={selectedFeedback} />
-                <Notes value={notes} handle={selectedFeedback} />
+            <Sentiment value={sentiment} handle={selectedFeedback} />
+            <Notes value={notes} handle={selectedFeedback} />
+            <Assignee value={assignee} handle={selectedFeedback} />
+            <Flex
+              justify="flex-end"
+              direction={["column-reverse", "column-reverse", "row"]}
+              gap={2}
+            >
+              <Actions handle={selectedFeedback} />
+            </Flex>
           </Stack>
         </Card>
       </Card>
     </Container>
-  )
+  );
 }
