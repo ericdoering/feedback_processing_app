@@ -6,6 +6,7 @@ import { Sentiment } from "./Sentiment";
 import { Notes } from "./Notes";
 import { Actions } from "./Actions";
 import { Assignee } from "./Assignee";
+import { OpenInStudio } from "./OpenInStudio";
 
 type FeedbackEditProps = {
   selectedFeedback: DocumentHandle;
@@ -51,7 +52,7 @@ const assignee = typeof data.assignee === "string" ? data.assignee : "";
                 <Text size={3}>{content}</Text>
               </Card>
             </Stack>
-            <Sentiment value={sentiment} handle={selectedFeedback} />
+            <Sentiment feedback={content} value={sentiment} handle={selectedFeedback} />
             <Notes value={notes} handle={selectedFeedback} />
             <Assignee value={assignee} handle={selectedFeedback} />
             <Flex
@@ -59,7 +60,8 @@ const assignee = typeof data.assignee === "string" ? data.assignee : "";
               direction={["column-reverse", "column-reverse", "row"]}
               gap={2}
             >
-              <Actions handle={selectedFeedback} />
+                <OpenInStudio handle={selectedFeedback} />
+                <Actions handle={selectedFeedback} />
             </Flex>
           </Stack>
         </Card>

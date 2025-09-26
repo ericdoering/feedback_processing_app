@@ -4,6 +4,7 @@ export default defineCliConfig({
   server: {
     port: 3334
   },
+  studioHost: 'feedback-course-ericD',
   api: {
     projectId: 'vajhpjto',
     dataset: 'production'
