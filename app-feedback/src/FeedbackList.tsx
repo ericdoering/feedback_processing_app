@@ -1,22 +1,23 @@
-import { Suspense, useState } from "react"
-import { type DocumentHandle, useDocuments } from "@sanity/sdk-react"
-import { Stack, Button, Spinner } from "@sanity/ui"
+import { Suspense, useState } from "react";
+import { type DocumentHandle, useDocuments } from "@sanity/sdk-react";
+import { Stack, Button, Spinner } from "@sanity/ui";
 
-import { FeedbackPreview } from "./FeedbackPreview"
-import { StatusSelector } from "./StatusSelector"
-import { OnlyMine } from "./Onlymine"
+import { FeedbackPreview } from "./FeedbackPreview";
+import { StatusSelector } from "./StatusSelector";
+import { OnlyMine } from "./Onlymine";
+import { FeedbackPreviewSelected } from "./FeedbackPreviewSelected";
 
 type FeedbackListProps = {
-  selectedFeedback: DocumentHandle | null
-  setSelectedFeedback: (feedback: DocumentHandle | null) => void
-}
+  selectedFeedback: DocumentHandle | null;
+  setSelectedFeedback: (feedback: DocumentHandle | null) => void;
+};
 
 export function FeedbackList({
   selectedFeedback,
   setSelectedFeedback,
 }: FeedbackListProps) {
-  const [userId, setUserId] = useState<string | null>(null)
-  const [status, setStatus] = useState("all")
+  const [userId, setUserId] = useState<string | null>(null);
+  const [status, setStatus] = useState("all");
 
   const { data, hasMore, loadMore } = useDocuments({
     documentType: "feedback",
@@ -32,14 +33,14 @@ export function FeedbackList({
     params: { userId, status },
     orderings: [{ field: "_createdAt", direction: "desc" }],
     batchSize: 10,
-  })
+  });
 
   return (
     <Stack space={2} padding={5}>
       <StatusSelector status={status} setStatus={setStatus} />
       <OnlyMine userId={userId} setUserId={setUserId} />
       {data?.map((feedback) => {
-        const isSelected = selectedFeedback?.documentId === feedback.documentId
+        const isSelected = selectedFeedback?.documentId === feedback.documentId;
 
         return (
           <Button
@@ -49,12 +50,16 @@ export function FeedbackList({
             tone={isSelected ? "primary" : undefined}
           >
             <Suspense fallback={<Spinner />}>
-              <FeedbackPreview {...feedback} />
+              {isSelected ? (
+                <FeedbackPreviewSelected {...feedback} />
+              ) : (
+                <FeedbackPreview {...feedback} />
+              )}
             </Suspense>
           </Button>
-        )
+        );
       })}
       {hasMore && <Button onClick={loadMore} text="Load more" />}
     </Stack>
-  )
+  );
 }
